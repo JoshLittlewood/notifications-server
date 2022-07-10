@@ -12,7 +12,7 @@
 [GET] Get notifications
 
 ```
-/getNotifications?postId=[id eg.1234-5679-1023]
+/getNotifications?postId=[String eg.1234-5679-1023]
 ```
 
 [POST] Add notifications
@@ -43,7 +43,6 @@ body: {
 
 ```
 /markAsRead
-
 body: {
     posts: [
 		String,
