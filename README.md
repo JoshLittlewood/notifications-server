@@ -45,7 +45,7 @@ body: {
 /markAsRead
 
 body: {
-	posts: [
+    posts: [
 		String,
 		String,
 		...
