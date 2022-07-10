@@ -1,0 +1,728 @@
+{
+	"info": {
+		"_postman_id": "5ff3e7ab-959f-4e2a-a1e6-1b02a1dc3ddc",
+		"name": "Phrasee",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get notifications",
+			"item": [
+				{
+					"name": "Get Notifications - returns results",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Expect a 200 response\", function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"Expect notifications to be returned\", function(){",
+									"    var response = pm.response.json();",
+									"    pm.expect(response).to.have.property(\"notifications\")",
+									"    pm.expect(response.notifications).to.have.lengthOf(3)",
+									"})",
+									"",
+									"pm.test(\"Expect metadata to be returned\", function(){",
+									"    var response = pm.response.json();",
+									"    pm.expect(response).to.have.property(\"metadata\")",
+									"    pm.expect(response.metadata.totalNotificationsCount).to.eql(3)",
+									"    pm.expect(response.metadata.likeNotificationsCount).to.eql(0)",
+									"    pm.expect(response.metadata.commentNotificationsCount).to.eql(3)",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/getNotifications?postId=c4cfbe322bb834ada81719036f9b287b",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"getNotifications"
+							],
+							"query": [
+								{
+									"key": "postId",
+									"value": "c4cfbe322bb834ada81719036f9b287b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Notifications - unknown id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Expect a 200 response with 0 notifications and metadata when unknown postId is passed\", function(){",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"Expect 0 notifications to be returned\", function(){",
+									"    var response = pm.response.json();",
+									"    pm.expect(response).to.have.property(\"notifications\")",
+									"    pm.expect(response.notifications).to.have.lengthOf(0)",
+									"})",
+									"",
+									"pm.test(\"Expect metadata to be returned with 0 counts\", function(){",
+									"    var response = pm.response.json();",
+									"    pm.expect(response).to.have.property(\"metadata\")",
+									"    pm.expect(response.metadata.totalNotificationsCount).to.eql(0)",
+									"    pm.expect(response.metadata.likeNotificationsCount).to.eql(0)",
+									"    pm.expect(response.metadata.commentNotificationsCount).to.eql(0)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/getNotifications?postId=INVALID",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"getNotifications"
+							],
+							"query": [
+								{
+									"key": "postId",
+									"value": "INVALID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Notifications - no post id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Expect a 400 response\", function(){",
+									"    pm.response.to.have.status(400);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/getNotifications",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"getNotifications"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Add notifications",
+			"item": [
+				{
+					"name": "Add notification - successful add",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Expect a 201 response\", function(){",
+									"    pm.response.to.have.status(201);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"Like\",\n    \"post\": {\n      \"id\": \"b1638f970c3ddd528671df76c4dcf13e\",\n      \"title\": \"TEST BIG TEST 2\"\n    },\n    \"user\": {\n      \"id\": \"4c18d43d4deccbac21a26c55f1033f53\",\n      \"name\": \"Josh2\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/addNotification",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"addNotification"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add notification - missing type",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Expect a 400 response\", function(){",
+									"    pm.response.to.have.status(400);",
+									"})",
+									"",
+									"pm.test(\"Expect an error message\", function(){",
+									"    pm.response.to.have.body(\"Notification 'type' did not match validation\")",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"post\": {\n      \"id\": \"b1638f970c3ddd528671df76c4dcf13e\",\n      \"title\": \"TEST BIG TEST 2\"\n    },\n    \"user\": {\n      \"id\": \"4c18d43d4deccbac21a26c55f1033f53\",\n      \"name\": \"Josh2\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/addNotification",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"addNotification"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add notification - incorrect type",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Expect a 400 response\", function(){",
+									"    pm.response.to.have.status(400);",
+									"})",
+									"",
+									"pm.test(\"Expect an error message\", function(){",
+									"    pm.response.to.have.body(\"Notification 'type' did not match validation\")",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"Something Else\",\n    \"post\": {\n      \"id\": \"b1638f970c3ddd528671df76c4dcf13e\",\n      \"title\": \"TEST BIG TEST 2\"\n    },\n    \"user\": {\n      \"id\": \"4c18d43d4deccbac21a26c55f1033f53\",\n      \"name\": \"Josh2\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/addNotification",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"addNotification"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add notification - missing post key",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Expect a 400 response\", function(){",
+									"    pm.response.to.have.status(400);",
+									"})",
+									"",
+									"pm.test(\"Expect an error message\", function(){",
+									"    pm.response.to.have.body(\"Notification 'post' did not match validation\")",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"Like\",\n    \"user\": {\n      \"id\": \"4c18d43d4deccbac21a26c55f1033f53\",\n      \"name\": \"Josh2\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/addNotification",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"addNotification"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add notification - missing post details",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Expect a 400 response\", function(){",
+									"    pm.response.to.have.status(400);",
+									"})",
+									"",
+									"pm.test(\"Expect an error message\", function(){",
+									"    pm.response.to.have.body(\"Notification 'post' did not match validation\")",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"Like\",\n    \"post\": {\n    },\n    \"user\": {\n      \"id\": \"4c18d43d4deccbac21a26c55f1033f53\",\n      \"name\": \"Josh2\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/addNotification",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"addNotification"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add notification - missing user key",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Expect a 400 response\", function(){",
+									"    pm.response.to.have.status(400);",
+									"})",
+									"",
+									"pm.test(\"Expect an error message\", function(){",
+									"    pm.response.to.have.body(\"Notification 'user' did not match validation\")",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"Like\",\n    \"post\": {\n      \"id\": \"b1638f970c3ddd528671df76c4dcf13e\",\n      \"title\": \"TEST BIG TEST 2\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/addNotification",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"addNotification"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add notification - missing user details",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Expect a 400 response\", function(){",
+									"    pm.response.to.have.status(400);",
+									"})",
+									"",
+									"pm.test(\"Expect an error message\", function(){",
+									"    pm.response.to.have.body(\"Notification 'user' did not match validation\")",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"Like\",\n    \"post\": {\n      \"id\": \"b1638f970c3ddd528671df76c4dcf13e\",\n      \"title\": \"TEST BIG TEST 2\"\n    },\n    \"user\": {\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/addNotification",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"addNotification"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Mark as read",
+			"item": [
+				{
+					"name": "Mark as read - successfully updated single id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Expect a 204 response for successful update\", function(){",
+									"    pm.response.to.have.status(204);",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"posts\": [\n        \"328c2391-be25-4e30-b57c-419bba648201\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/markAsRead",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"markAsRead"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark as read - successfully updated multiple ids",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Expect a 204 response for successful update\", function(){",
+									"    pm.response.to.have.status(204);",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"posts\": [\n        \"328c2391-be25-4e30-b57c-419bba648201\",\n        \"46f92622-5a92-4912-b97b-93be32fe25db\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/markAsRead",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"markAsRead"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark as read - no ids provided",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Expect a 400 response\", function(){",
+									"    pm.response.to.have.status(400);",
+									"})",
+									"",
+									"pm.test(\"Expect an error message\", function(){",
+									"    pm.response.to.have.body(\"No post ids provided in patch body\")",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"posts\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/markAsRead",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"markAsRead"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark as read - unknown ids provided",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Expect a 400 response\", function(){",
+									"    pm.response.to.have.status(400);",
+									"})",
+									"",
+									"pm.test(\"Expect an error message\", function(){",
+									"    pm.response.to.have.body(\"1 or more of the notification ids provided could not be found\")",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"posts\": [\n        \"invalid id\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/markAsRead",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"markAsRead"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "queryParam",
+			"value": ""
+		}
+	]
+}
